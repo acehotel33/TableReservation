@@ -84,12 +84,13 @@ app.patch('/api/reservations/:id', async (req, res) => {
 // DELETE route to delete a reservation by ID
 app.delete('/api/reservations/:id', async (req, res) => {
     try {
-        const reservation = await Reservation.findByIdAndDelete(req.params.id);
-        if (!reservation) {
-            return res.status(404).send();
+        const result = await Reservation.findByIdAndDelete(req.params.id);
+        if (result) {
+            res.status(200).json({ message: 'Reservation deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'Reservation not found' });
         }
-        res.send(reservation);
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json({ message: 'Error deleting reservation' });
     }
 });
